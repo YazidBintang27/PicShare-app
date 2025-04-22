@@ -10,6 +10,8 @@ class AppTheme {
             tertiary: const Color(0xFF262626)),
         brightness: Brightness.light,
         useMaterial3: true,
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent, 
         textTheme: _textTheme);
   }
 
@@ -21,6 +23,8 @@ class AppTheme {
             tertiary: const Color(0xFFFFFFFF)),
         brightness: Brightness.dark,
         useMaterial3: true,
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent, 
         textTheme: _textTheme);
   }
 

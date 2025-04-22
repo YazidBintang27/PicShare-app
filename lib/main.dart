@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:picshare_app/presentation/styles/theme/app_theme.dart';
+import 'package:picshare_app/providers/main/index_nav_provider.dart';
 import 'package:picshare_app/routes/app_router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => IndexNavProvider())
+      ],
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {

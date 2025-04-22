@@ -18,6 +18,8 @@ class _OnBoardingState extends State<OnBoarding> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final tertiary = Theme.of(context).colorScheme.tertiary;
     final List<Widget> _pages = [
       OnboardingContent(
         imagePath: 'assets/images/Image upload-bro.png',
@@ -26,10 +28,10 @@ class _OnBoardingState extends State<OnBoarding> {
             children: [
               TextSpan(
                 text: 'Snap',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? primary
+                        : tertiary),
               ),
               TextSpan(
                 text: '. Share. Inspire.',
@@ -52,10 +54,10 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
               TextSpan(
                 text: 'share',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? primary
+                        : tertiary),
               ),
               TextSpan(
                 text: '.',
@@ -77,10 +79,10 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
               TextSpan(
                 text: 'Places',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? primary
+                        : tertiary),
               ),
               TextSpan(
                 text: '.',

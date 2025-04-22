@@ -20,10 +20,8 @@ class AuthTextfield extends StatelessWidget {
       padding: const EdgeInsets.only(top: 12, bottom: 20),
       child: TextField(
         controller: controller,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge
-            ?.copyWith(fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold, color: const Color(0xFF262626)),
         obscureText: obscureText,
         decoration: InputDecoration(
             hintText: hintText,

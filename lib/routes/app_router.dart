@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:picshare_app/presentation/pages/home.dart';
+import 'package:picshare_app/presentation/pages/detail_picture.dart';
 import 'package:picshare_app/presentation/pages/login.dart';
+import 'package:picshare_app/presentation/pages/main.dart';
 import 'package:picshare_app/presentation/pages/onboarding.dart';
 import 'package:picshare_app/presentation/pages/register.dart';
 import 'package:picshare_app/presentation/pages/splash.dart';
@@ -14,6 +15,7 @@ class AppRouter {
     ),
     GoRoute(path: '/register', builder: (context, state) => const Register()),
     GoRoute(path: '/login', builder: (context, state) => const Login()),
-    GoRoute(path: '/home', builder: (context, state) => const Home())
+    GoRoute(path: '/main', builder: (context, state) => const Main()),
+    GoRoute(path: '/detail', builder: (context, state) => const DetailPicture()),
   ]);
 }

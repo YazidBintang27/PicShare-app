@@ -11,7 +11,9 @@ class ButtonStroke extends StatelessWidget {
         style: ButtonStyle(
             side: WidgetStateProperty.all(
               BorderSide(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
                 width: 2,
               ),
             ),
@@ -22,10 +24,11 @@ class ButtonStroke extends StatelessWidget {
         onPressed: action,
         child: Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
+              ),
         ));
   }
 }
