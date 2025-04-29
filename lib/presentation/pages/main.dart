@@ -18,9 +18,9 @@ class Main extends StatelessWidget {
       onWillPop: () async {
         if (selectedIndex != 0) {
           context.read<IndexNavProvider>().setIndexBottomNavbar = 0;
-          return false; // prevent default back behavior
+          return false; 
         }
-        return true; // allow exit if already in Home (index 0)
+        return true; 
       },
       child: Scaffold(
         body: Consumer<IndexNavProvider>(builder: (context, value, child) {

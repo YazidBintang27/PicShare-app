@@ -13,9 +13,9 @@ class PictureCard extends StatelessWidget {
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(32),
-            child: Image.asset(
-              "assets/images/noimage.jpg",
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              imageUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -24,6 +24,8 @@ class PictureCard extends StatelessWidget {
           ),
           Text(
             username,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyLarge,
           )
         ],
