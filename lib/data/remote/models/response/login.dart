@@ -16,6 +16,14 @@ class Login {
       loginResult: LoginResult.fromJson(json['loginResult']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'error': error,
+      'message': message,
+      'loginResult': loginResult.toJson(),
+    };
+  }
 }
 
 class LoginResult {
@@ -35,5 +43,13 @@ class LoginResult {
       name: json['name'] ?? '',
       token: json['token'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'name': name,
+      'token': token,
+    };
   }
 }
