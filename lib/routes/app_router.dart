@@ -16,6 +16,11 @@ class AppRouter {
     GoRoute(path: '/register', builder: (context, state) => const Register()),
     GoRoute(path: '/login', builder: (context, state) => const Login()),
     GoRoute(path: '/main', builder: (context, state) => const Main()),
-    GoRoute(path: '/detail', builder: (context, state) => const DetailPicture()),
+    GoRoute(
+        path: '/detail/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return DetailPicture(id: id);
+        }),
   ]);
 }
