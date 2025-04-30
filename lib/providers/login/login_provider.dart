@@ -46,4 +46,9 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void resetState() {
+    _resultState = AppNoneState();
+    notifyListeners();
+  }
 }

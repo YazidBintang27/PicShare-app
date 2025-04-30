@@ -34,10 +34,12 @@ class _LoginState extends State<Login> {
                   const SnackBar(content: Text('Login success!')),
                 );
                 context.go('/main');
+                provider.resetState();
               } else if (state is AppErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Login fail!')),
                 );
+                provider.resetState();
               }
             });
 
@@ -45,10 +47,12 @@ class _LoginState extends State<Login> {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 32),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -64,7 +68,9 @@ class _LoginState extends State<Login> {
                                 children: [
                                   TextSpan(
                                     text: 'Login to ',
-                                    style: Theme.of(context).textTheme.headlineSmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
                                   ),
                                   TextSpan(
                                     text: 'PicShare',
@@ -72,7 +78,9 @@ class _LoginState extends State<Login> {
                                         .textTheme
                                         .headlineSmall
                                         ?.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                   ),
                                 ],
@@ -99,7 +107,9 @@ class _LoginState extends State<Login> {
                                 size: 20,
                               ),
                               suffixIcon: IconButton(
-                                onPressed: () => context.read<LoginProvider>().passwordVisibility(),
+                                onPressed: () => context
+                                    .read<LoginProvider>()
+                                    .passwordVisibility(),
                                 icon: HugeIcon(
                                   icon: isPasswordHidden
                                       ? HugeIcons.strokeRoundedViewOff
@@ -125,9 +135,11 @@ class _LoginState extends State<Login> {
                                   ),
                             const Spacer(),
                             ButtonStroke(
-                              text: 'REGISTER',
-                              action: () => context.pushReplacement('/register'),
-                            ),
+                                text: 'REGISTER',
+                                action: () {
+                                  context.pop();
+                                  context.push('/register');
+                                }),
                           ],
                         ),
                       ),

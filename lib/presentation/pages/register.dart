@@ -35,10 +35,12 @@ class _RegisterState extends State<Register> {
                   SnackBar(content: Text('Registration success!')),
                 );
                 context.go('/login');
+                provider.resetState();
               } else if (state is AppErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Registration fail!')),
                 );
+                provider.resetState();
               }
             });
 
@@ -46,25 +48,34 @@ class _RegisterState extends State<Register> {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 32),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const SizedBox(height: 28),
-                            Image.asset('assets/images/PicShare.png', width: 100, height: 100),
+                            Image.asset('assets/images/PicShare.png',
+                                width: 100, height: 100),
                             const SizedBox(height: 32),
                             Text.rich(TextSpan(children: [
                               TextSpan(
                                 text: 'Register to ',
-                                style: Theme.of(context).textTheme.headlineSmall,
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
                               ),
                               TextSpan(
                                 text: 'PicShare',
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      color: Theme.of(context).colorScheme.primary),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                               ),
                             ])),
                             const SizedBox(height: 60),
@@ -99,7 +110,9 @@ class _RegisterState extends State<Register> {
                                 size: 20,
                               ),
                               suffixIcon: IconButton(
-                                onPressed: () => context.read<RegisterProvider>().passwordVisibility(),
+                                onPressed: () => context
+                                    .read<RegisterProvider>()
+                                    .passwordVisibility(),
                                 icon: HugeIcon(
                                   icon: _isPasswordHidden
                                       ? HugeIcons.strokeRoundedViewOff
@@ -126,9 +139,11 @@ class _RegisterState extends State<Register> {
                                   ),
                             const Spacer(),
                             ButtonStroke(
-                              text: 'LOGIN',
-                              action: () => context.go('/login'),
-                            ),
+                                text: 'LOGIN',
+                                action: () {
+                                  context.pop();
+                                  context.push('/login');
+                                }),
                           ],
                         ),
                       ),
