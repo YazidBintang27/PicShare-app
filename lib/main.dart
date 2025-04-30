@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:picshare_app/data/local/shared_preferences_service.dart';
 import 'package:picshare_app/data/remote/services/api_service.dart';
 import 'package:picshare_app/presentation/styles/theme/app_theme.dart';
@@ -16,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('en_US', null);
 
   final sharedPreferences = await SharedPreferences.getInstance();
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:intl/intl.dart';
 import 'package:picshare_app/data/remote/models/response/story_detail.dart';
 import 'package:picshare_app/providers/detail/detail_provider.dart';
 import 'package:picshare_app/utils/app_state.dart';
@@ -53,8 +54,8 @@ class _DetailPictureState extends State<DetailPicture> {
                     fit: BoxFit.cover,
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16, bottom: 4, top: 14, right: 16),
+                    padding: const EdgeInsets.only(
+                        left: 16, bottom: 4, top: 14, right: 16),
                     child: Text(
                       data.story.name,
                       maxLines: 1,
@@ -63,9 +64,10 @@ class _DetailPictureState extends State<DetailPicture> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
+                    padding:
+                        const EdgeInsets.only(left: 16, bottom: 8, right: 16),
                     child: Text(
-                      data.story.createdAt.toString(),
+                      _dateFormat('${data.story.createdAt}'),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -98,5 +100,10 @@ class _DetailPictureState extends State<DetailPicture> {
         },
       ),
     );
+  }
+
+  String _dateFormat(String date) {
+    DateTime dateTime = DateTime.parse(date);
+    return DateFormat("EEE, d MMM yyyy", "en_US").format(dateTime);
   }
 }
