@@ -26,6 +26,7 @@ class _AddPictureState extends State<AddPicture> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () {
             context.read<IndexNavProvider>().setIndexBottomNavbar = 0;

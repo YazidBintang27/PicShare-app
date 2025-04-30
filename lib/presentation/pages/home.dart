@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           'PicShare',
           style: TextStyle(
@@ -39,10 +40,17 @@ class _HomeState extends State<Home> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: HugeIcon(
-              icon: HugeIcons.strokeRoundedMapsLocation01,
-              color: Theme.of(context).colorScheme.tertiary,
-              size: 24,
+            child: IconButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Coming soon')),
+                );
+              },
+              icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedMapsLocation01,
+                color: Theme.of(context).colorScheme.tertiary,
+                size: 24,
+              ),
             ),
           )
         ],
@@ -63,7 +71,8 @@ class _HomeState extends State<Home> {
                     itemCount: data.listStory.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                          onTap: () => context.push('/detail/${data.listStory[index].id}'),
+                          onTap: () => context
+                              .push('/detail/${data.listStory[index].id}'),
                           child: PictureCard(
                               imageUrl: data.listStory[index].photoUrl,
                               username: data.listStory[index].name));
