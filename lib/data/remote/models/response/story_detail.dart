@@ -1,9 +1,13 @@
-import 'package:picshare_app/data/remote/models/response/story.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'story.dart';
 
+part 'story_detail.g.dart';
+
+@JsonSerializable()
 class StoryDetail {
-  bool error;
-  String message;
-  Story story;
+  final bool error;
+  final String message;
+  final Story story;
 
   StoryDetail({
     required this.error,
@@ -11,11 +15,6 @@ class StoryDetail {
     required this.story,
   });
 
-  factory StoryDetail.fromJson(Map<String, dynamic> json) {
-    return StoryDetail(
-      error: json['error'] ?? false,
-      message: json['message'] ?? '',
-      story: Story.fromJson(json['story']),
-    );
-  }
+  factory StoryDetail.fromJson(Map<String, dynamic> json) => _$StoryDetailFromJson(json);
+  Map<String, dynamic> toJson() => _$StoryDetailToJson(this);
 }
