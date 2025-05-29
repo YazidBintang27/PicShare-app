@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:picshare_app/presentation/pages/detail_picture.dart';
 import 'package:picshare_app/presentation/pages/login.dart';
 import 'package:picshare_app/presentation/pages/main.dart';
+import 'package:picshare_app/presentation/pages/maps.dart';
+import 'package:picshare_app/presentation/pages/maps_detail.dart';
 import 'package:picshare_app/presentation/pages/onboarding.dart';
 import 'package:picshare_app/presentation/pages/register.dart';
 import 'package:picshare_app/presentation/pages/splash.dart';
@@ -22,5 +24,12 @@ class AppRouter {
           final id = state.pathParameters['id']!;
           return DetailPicture(id: id);
         }),
+    GoRoute(path: '/maps', builder: (context, state) => const Maps()),
+    GoRoute(
+        path: '/maps/detail/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return MapsDetail(id: id);
+        })
   ]);
 }

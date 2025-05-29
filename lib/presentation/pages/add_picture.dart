@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'package:picshare_app/data/remote/models/request/add_story_request.dart';
 import 'package:picshare_app/presentation/widgets/button_add_picture.dart';
 import 'package:picshare_app/presentation/widgets/button_fill.dart';
 import 'package:picshare_app/providers/add_picture/add_picture_provider.dart';
+import 'package:picshare_app/providers/home/home_provider.dart';
 import 'package:picshare_app/providers/main/index_nav_provider.dart';
 import 'package:picshare_app/utils/app_state.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +24,7 @@ class AddPicture extends StatefulWidget {
 
 class _AddPictureState extends State<AddPicture> {
   final TextEditingController _controller = TextEditingController();
+  LatLng? _latLng;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +101,7 @@ class _AddPictureState extends State<AddPicture> {
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 28),
+                              horizontal: 16, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
@@ -129,6 +133,28 @@ class _AddPictureState extends State<AddPicture> {
                           ),
                         ),
                         Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, bottom: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Add Location',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              Transform.scale(
+                                scale: 0.9,
+                                child: Switch(
+                                    value: provider.isAddLocation,
+                                    onChanged: (value) {
+                                      provider.setAddLocation(value);
+                                      _getLocation();
+                                    }),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: isLoading is AppLoadingState
                               ? const CircularProgressIndicator()
@@ -152,6 +178,7 @@ class _AddPictureState extends State<AddPicture> {
 
   _postPicture() async {
     final addPictureProvider = context.read<AddPictureProvider>();
+    AddStoryRequest data;
 
     final imagePath = addPictureProvider.imagePath;
     final imageFile = addPictureProvider.imageFile;
@@ -165,8 +192,15 @@ class _AddPictureState extends State<AddPicture> {
 
     final photoFile = await addPictureProvider.compressImage(imageFile);
 
-    final data =
-        AddStoryRequest(description: _controller.text, photo: photoFile);
+    if (addPictureProvider.isAddLocation) {
+      data = AddStoryRequest(
+          description: _controller.text,
+          photo: photoFile,
+          lat: _latLng!.latitude,
+          lon: _latLng!.longitude);
+    } else {
+      data = AddStoryRequest(description: _controller.text, photo: photoFile);
+    }
 
     await addPictureProvider.addStory(data);
 
@@ -174,6 +208,7 @@ class _AddPictureState extends State<AddPicture> {
       addPictureProvider.setImageFile(null);
       addPictureProvider.setImagePath(null);
       context.read<IndexNavProvider>().setIndexBottomNavbar = 0;
+      context.read<HomeProvider>().pageItems = 1;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Share picture success')),
       );
@@ -230,5 +265,32 @@ class _AddPictureState extends State<AddPicture> {
             fit: BoxFit.cover,
           )
         : Image.file(File(imagePath.toString()), fit: BoxFit.cover);
+  }
+
+  _getLocation() async {
+    final Location location = Location();
+    late bool serviceEnabled;
+    late PermissionStatus permissionGranted;
+    late LocationData locationData;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        debugPrint("Location services is not available");
+        return;
+      }
+    }
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        debugPrint("Location permission is denied");
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+    _latLng = LatLng(locationData.latitude!, locationData.longitude!);
   }
 }

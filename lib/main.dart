@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:picshare_app/data/local/shared_preferences_service.dart';
 import 'package:picshare_app/data/remote/services/api_service.dart';
 import 'package:picshare_app/presentation/styles/theme/app_theme.dart';
@@ -8,6 +9,7 @@ import 'package:picshare_app/providers/detail/detail_provider.dart';
 import 'package:picshare_app/providers/home/home_provider.dart';
 import 'package:picshare_app/providers/login/login_provider.dart';
 import 'package:picshare_app/providers/main/index_nav_provider.dart';
+import 'package:picshare_app/providers/maps/maps_provider.dart';
 import 'package:picshare_app/providers/profile/profile_provider.dart';
 import 'package:picshare_app/providers/register/register_provider.dart';
 import 'package:picshare_app/providers/splash/splash_provider.dart';
@@ -22,13 +24,17 @@ void main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  await Permission.location.request();
+
   final sharedPreferencesService = SharedPreferencesService(sharedPreferences);
   runApp(MultiProvider(
     providers: [
       Provider(create: (context) => ApiService()),
       Provider(create: (context) => sharedPreferencesService),
       ChangeNotifierProvider(create: (context) => IndexNavProvider()),
-      ChangeNotifierProvider(create: (context) => AddPictureProvider(context.read<ApiService>(), sharedPreferencesService)),
+      ChangeNotifierProvider(
+          create: (context) => AddPictureProvider(
+              context.read<ApiService>(), sharedPreferencesService)),
       ChangeNotifierProvider(
           create: (context) => RegisterProvider(context.read<ApiService>())),
       ChangeNotifierProvider(
@@ -43,6 +49,9 @@ void main() async {
               context.read<ApiService>(), sharedPreferencesService)),
       ChangeNotifierProvider(
           create: (context) => DetailProvider(
+              context.read<ApiService>(), sharedPreferencesService)),
+      ChangeNotifierProvider(
+          create: (context) => MapsProvider(
               context.read<ApiService>(), sharedPreferencesService))
     ],
     child: const MainApp(),

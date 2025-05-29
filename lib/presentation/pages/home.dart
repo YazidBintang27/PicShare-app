@@ -16,12 +16,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      context.read<HomeProvider>().getStoryList();
+    final HomeProvider homeProvider = context.read<HomeProvider>();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (homeProvider.pageItems != null) {
+          homeProvider.getStoryList();
+        }
+      }
     });
+
+    Future.microtask(() {
+      homeProvider.getStoryList();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -42,9 +59,7 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(right: 16),
             child: IconButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Coming soon')),
-                );
+                context.push('/maps');
               },
               icon: HugeIcon(
                 icon: HugeIcons.strokeRoundedMapsLocation01,
@@ -65,11 +80,19 @@ class _HomeState extends State<Home> {
                 ),
               AppLoadedState(response: var data as StoryList) =>
                 MasonryGridView.count(
+                    controller: scrollController,
                     crossAxisCount: 2,
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4,
-                    itemCount: data.listStory.length,
+                    itemCount: data.listStory.length +
+                        (provider.pageItems != null ? 1 : 0),
                     itemBuilder: (context, index) {
+                      if (index == data.listStory.length &&
+                          provider.pageItems != null) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
                       return GestureDetector(
                           onTap: () => context
                               .push('/detail/${data.listStory[index].id}'),

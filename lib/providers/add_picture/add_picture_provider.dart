@@ -22,6 +22,15 @@ class AddPictureProvider extends ChangeNotifier {
   String? imagePath;
   XFile? imageFile;
 
+  bool _isAddLocation = false;
+
+  bool get isAddLocation => _isAddLocation;
+
+  void setAddLocation(bool value) {
+    _isAddLocation = value;
+    notifyListeners();
+  }
+
   void setImagePath(String? value) {
     imagePath = value;
     notifyListeners();

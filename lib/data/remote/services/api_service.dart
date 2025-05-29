@@ -15,10 +15,14 @@ import 'package:path/path.dart';
 class ApiService {
   Dio dio = Dio();
 
-  Future<StoryList> getStoryList(String token) async {
+  Future<StoryList> getStoryList(String token,
+      {int page = 1, int size = 10, int location = 0}) async {
     try {
       final response = await dio
-          .get('${ApiConstant.baseUrl}${ApiConstant.stories}',
+          .get(
+              (location == 0)
+                  ? '${ApiConstant.baseUrl}${ApiConstant.stories}?page=$page&size=$size'
+                  : '${ApiConstant.baseUrl}${ApiConstant.stories}?location=$location',
               options: Options(headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer $token'
