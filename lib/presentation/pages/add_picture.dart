@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:location/location.dart';
 import 'package:picshare_app/data/remote/models/request/add_story_request.dart';
 import 'package:picshare_app/presentation/widgets/button_add_picture.dart';
 import 'package:picshare_app/presentation/widgets/button_fill.dart';
@@ -24,7 +24,7 @@ class AddPicture extends StatefulWidget {
 
 class _AddPictureState extends State<AddPicture> {
   final TextEditingController _controller = TextEditingController();
-  LatLng? _latLng;
+  LatLng? latLng;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,24 +134,42 @@ class _AddPictureState extends State<AddPicture> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 16, right: 16, bottom: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Add Location',
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                              Transform.scale(
-                                scale: 0.9,
-                                child: Switch(
-                                    value: provider.isAddLocation,
-                                    onChanged: (value) {
-                                      provider.setAddLocation(value);
-                                      _getLocation();
-                                    }),
-                              )
-                            ],
+                              top: 12, left: 16, right: 16, bottom: 32),
+                          child: GestureDetector(
+                            onTap: () async {
+                              final result = await context.push('/maps/add');
+                              debugPrint("Test: ${result.toString()}");
+                              if (result != null && result is LatLng) {
+                                setState(() {
+                                  latLng = result;
+                                });
+                                context
+                                    .read<AddPictureProvider>()
+                                    .setAddLocation(true);
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                HugeIcon(
+                                  icon: HugeIcons.strokeRoundedLocation01,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  size: 20,
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  'Add Location',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                const Spacer(),
+                                HugeIcon(
+                                  icon: HugeIcons.strokeRoundedArrowRight01,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  size: 24,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -192,12 +210,12 @@ class _AddPictureState extends State<AddPicture> {
 
     final photoFile = await addPictureProvider.compressImage(imageFile);
 
-    if (addPictureProvider.isAddLocation) {
+    if (latLng != null) {
       data = AddStoryRequest(
           description: _controller.text,
           photo: photoFile,
-          lat: _latLng!.latitude,
-          lon: _latLng!.longitude);
+          lat: latLng!.latitude,
+          lon: latLng!.longitude);
     } else {
       data = AddStoryRequest(description: _controller.text, photo: photoFile);
     }
@@ -265,32 +283,5 @@ class _AddPictureState extends State<AddPicture> {
             fit: BoxFit.cover,
           )
         : Image.file(File(imagePath.toString()), fit: BoxFit.cover);
-  }
-
-  _getLocation() async {
-    final Location location = Location();
-    late bool serviceEnabled;
-    late PermissionStatus permissionGranted;
-    late LocationData locationData;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        debugPrint("Location services is not available");
-        return;
-      }
-    }
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        debugPrint("Location permission is denied");
-        return;
-      }
-    }
-
-    locationData = await location.getLocation();
-    _latLng = LatLng(locationData.latitude!, locationData.longitude!);
   }
 }

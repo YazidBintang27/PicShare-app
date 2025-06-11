@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:picshare_app/data/remote/models/response/story.dart';
 import 'package:picshare_app/data/remote/models/response/story_detail.dart';
 import 'package:picshare_app/providers/detail/detail_provider.dart';
 import 'package:picshare_app/utils/app_state.dart';

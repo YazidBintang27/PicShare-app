@@ -3,6 +3,7 @@ import 'package:picshare_app/presentation/pages/detail_picture.dart';
 import 'package:picshare_app/presentation/pages/login.dart';
 import 'package:picshare_app/presentation/pages/main.dart';
 import 'package:picshare_app/presentation/pages/maps.dart';
+import 'package:picshare_app/presentation/pages/maps_add_location.dart';
 import 'package:picshare_app/presentation/pages/maps_detail.dart';
 import 'package:picshare_app/presentation/pages/onboarding.dart';
 import 'package:picshare_app/presentation/pages/register.dart';
@@ -30,6 +31,8 @@ class AppRouter {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           return MapsDetail(id: id);
-        })
+        }),
+    GoRoute(
+        path: '/maps/add', builder: (context, state) => const MapsAddLocation())
   ]);
 }
